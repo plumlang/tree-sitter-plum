@@ -1,0 +1,47 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "plum",
+      "camelcase": "Plum",
+      "title": "Plumlang",
+      "scope": "source.plum",
+      "file-types": [
+        "plum"
+      ],
+      "injection-regex": "^plum$",
+      "class-name": "TreeSitterPlum",
+      "highlights": "queries/highlights.scm",
+      "locals": "queries/locals.scm",
+      "tags": "queries/tags.scm",
+      "injections": "queries/injections.scm"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Tree-sitter grammar for Plumlang",
+    "authors": [
+      {
+        "name": "Elixpo and the Plumlang contributors",
+        "email": "hello@elixpo.com",
+        "url": "https://plum.elixpo.com"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/plumlang/tree-sitter-plum",
+      "homepage": "https://plum.elixpo.com"
+    },
+    "namespace": "io.github.plumlang"
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "java": false,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
