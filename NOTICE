@@ -1,0 +1,36 @@
+NOTICE - the notice board
+=========================
+
+This repository is licensed under the Elixpo License (see ./LICENSE). This
+NOTICE file records reservations and product-specific terms that sit ON TOP
+of that licence. Read it together with LICENSE and
+LICENSES/exceptions/Plumlang-trademarks.
+
+REPOSITORY
+----------
+
+  Name:        plumlang/tree-sitter-plum
+  What it is:  The Tree-sitter grammar for Plumlang: grammar.js, the
+               external scanner, the generated parser, the editor queries
+               and the language bindings.
+
+EXCLUSIVE TO THIS REPOSITORY
+----------------------------
+
+  * The package names "tree-sitter-plum" on npm, crates.io, PyPI and the Go
+    module path github.com/plumlang/tree-sitter-plum, as the official
+    Plumlang grammar. Forks are welcome under MIT, but may not be published
+    under these names or presented as the official grammar.
+
+EDITORS AND REDISTRIBUTION
+--------------------------
+
+  * Editors and their plugin repositories (nvim-treesitter, Helix, Zed and
+    others) may vendor, copy and adapt the grammar and the queries under the
+    MIT licence, and may name the language "Plumlang" or "plum" in their
+    language lists. That is referential use and needs no permission.
+
+The language itself, its reference implementation and its documentation are
+in plumlang/plumlang and at https://plum.elixpo.com, under their own terms.
+
+Contact: hello@elixpo.com

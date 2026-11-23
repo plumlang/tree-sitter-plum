@@ -1,0 +1,88 @@
+ELIXPO LICENSE
+==============
+
+This repository is part of the Elixpo ecosystem and is licensed under the
+Elixpo licensing standard, the same standard that applies to every Elixpo
+repository. Product-specific terms for this repository are declared in the
+NOTICE file at the repository root (the "notice board"), which must be read
+together with this LICENSE.
+
+The LICENSES/ directory holds the canonical texts; this file is the pointer.
+
+This repository is tree-sitter-plum, the Tree-sitter grammar for Plumlang:
+the grammar, its external scanner, the generated parser, the editor queries,
+the language bindings and the tests.
+
+CODE
+====
+
+All code in this repository (grammar.js, src/ including the generated
+parser, queries/, bindings/, test/, script/, the build and package files,
+and the workflows under .github/) is provided under:
+
+	SPDX-License-Identifier: MIT WITH Plumlang-trademarks
+
+Being under the terms of the MIT License, as set out in:
+
+	LICENSES/preferred/MIT
+
+The package manifests (package.json, Cargo.toml, pyproject.toml) declare
+"MIT", the licence of the files; the exception below adds no conditions on
+the code and only reserves names and marks.
+
+CONTENT
+=======
+
+The documentation and other written content (README.md and the LICENSES/
+README) is provided under:
+
+	SPDX-License-Identifier: CC-BY-4.0 WITH Plumlang-trademarks
+
+Being under the terms of the Creative Commons Attribution 4.0 International
+License, as set out in:
+
+	LICENSES/preferred/CC-BY-4.0
+
+EXCEPTION (names, marks, and royalties)
+=======================================
+
+The code and content grants above carry an explicit trademark and naming
+exception:
+
+	LICENSES/exceptions/Plumlang-trademarks
+
+which also incorporates the Elixpo reservations in:
+
+	LICENSES/exceptions/Oreo-trademarks
+
+The licences grant rights to the files as files. They do NOT grant rights
+to the Plumlang, Elixpo or Oreo names or brands. Saying that an editor or
+tool "supports Plumlang" with this grammar is referential use and is
+welcome.
+
+NOTICE BOARD (per-product reservations)
+=======================================
+
+Reservations for this repository are declared in:
+
+	NOTICE
+
+THIRD-PARTY NOTICES
+===================
+
+Third-party components keep their own licences:
+
+	LICENSES/notices/notice-board
+	LICENSES/README.md
+
+CONTRIBUTIONS
+=============
+
+By submitting a contribution to this repository you agree that it is licensed
+inbound under this standard (MIT for code, CC-BY-4.0 for content) and that
+you have the right to submit it. The Developer Certificate of Origin
+(https://developercertificate.org) applies to every commit. We do not require
+a CLA.
+
+Copyright (c) 2026 Elixpo and the Plumlang contributors.
+SPDX-License-Identifier: MIT WITH Plumlang-trademarks

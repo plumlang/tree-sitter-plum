@@ -1,0 +1,61 @@
+Plumlang-trademarks exception
+=============================
+
+SPDX-Exception-Identifier: Plumlang-trademarks
+SPDX-Licenses: MIT, CC-BY-4.0
+
+This exception qualifies the MIT and CC-BY-4.0 grants in this repository. It
+is referenced via `WITH Plumlang-trademarks` in the SPDX-License-Identifier of
+affected files and in the root LICENSE. It incorporates the Oreo-trademarks
+exception (LICENSES/exceptions/Oreo-trademarks), which reserves the Elixpo
+and Oreo names and identity.
+
+WHAT IS RESERVED
+----------------
+
+The following are trademarks and brand property of Elixpo and are NOT
+licensed by the MIT or CC-BY-4.0 grants:
+
+  * The name "Plumlang", and "Plum" when used as the name of a programming
+    language, its tools, or its packages.
+  * The Plumlang marks: the Open Field plum mark, its one-colour variant, the
+    pixel plum, and the lockups that combine any of them with the name.
+  * The identity rules in docs/brand-system.md as a combination (the files
+    and individual colours are not reserved on their own).
+  * The plum.elixpo.com identifier, the plumlang GitHub organisation, and the
+    `plum-lang` Visual Studio Marketplace publisher.
+  * Everything reserved by the Oreo-trademarks exception.
+
+WHAT YOU MAY DO
+---------------
+
+You may use, copy, modify, merge, publish, distribute, and sublicense the
+licensed code and asset files, including for commercial purposes, subject to
+the MIT or CC-BY-4.0 licence that applies to them.
+
+Referential ("nominative") use is permitted: you may truthfully say that your
+project is written in Plumlang, supports Plumlang, or works with Plumlang,
+and you may show the unmodified marks next to such a statement (for example,
+in a list of supported languages), provided you do not imply sponsorship or
+endorsement.
+
+WHAT YOU MAY NOT DO
+-------------------
+
+Without prior written permission from Elixpo, you may NOT:
+
+  1. Use the Plumlang name or marks to brand, market, or imply endorsement of
+     a product or service that is not an official Plumlang project.
+  2. Offer a competing language, distribution, hosted service, or editor
+     extension under the Plumlang name or marks, or under a confusingly
+     similar name, mark, or identity.
+  3. Register or attempt to register trademarks, domains, package names, or
+     marketplace listings identical or confusingly similar to the reserved
+     names and marks.
+  4. Remove or alter this exception, the attribution required by CC-BY-4.0,
+     or the notices that accompany the assets.
+
+The use of the marks in Plumlang's own repositories is also governed by
+https://github.com/plumlang/plumlang/blob/main/TRADEMARKS.md.
+
+For permissions or questions: hello@elixpo.com

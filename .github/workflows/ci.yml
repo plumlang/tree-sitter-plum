@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Generate, test and parse examples
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the grammar
+        uses: actions/checkout@v4
+
+      - name: Check out Plumlang
+        uses: actions/checkout@v4
+        with:
+          repository: plumlang/plumlang
+          path: .plumlang
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install the tree-sitter CLI
+        run: npm install --global tree-sitter-cli@0.27.2
+
+      - name: Check that src/ is generated from grammar.js
+        run: |
+          tree-sitter generate
+          git diff --exit-code -- src/
+
+      - name: Run the corpus tests
+        run: tree-sitter test
+
+      - name: Check the queries
+        run: |
+          for query in queries/*.scm; do
+            tree-sitter query "$query" .plumlang/examples/*.plum >/dev/null
+          done
+
+      - name: Parse the Plumlang examples and tests
+        run: script/parse-examples.sh .plumlang
