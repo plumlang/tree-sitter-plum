@@ -25,7 +25,7 @@ type NodeInfo =
  *
  * @example
  * import Parser from "tree-sitter";
- * import Plum from "tree-sitter-plum";
+ * import Plum from "@plumlang/tree-sitter-plum";
  *
  * const parser = new Parser();
  * parser.setLanguage(Plum);

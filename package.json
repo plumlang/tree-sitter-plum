@@ -1,5 +1,5 @@
 {
-  "name": "tree-sitter-plum",
+  "name": "@plumlang/tree-sitter-plum",
   "version": "0.1.0",
   "description": "Tree-sitter grammar for Plumlang",
   "type": "module",
@@ -8,6 +8,9 @@
     "url": "git+https://github.com/plumlang/tree-sitter-plum.git"
   },
   "homepage": "https://plum.elixpo.com",
+  "bugs": {
+    "url": "https://github.com/plumlang/tree-sitter-plum/issues"
+  },
   "license": "MIT",
   "author": {
     "name": "Elixpo and the Plumlang contributors",
@@ -21,7 +24,10 @@
     "parsing",
     "tree-sitter",
     "plum",
-    "plumlang"
+    "plumlang",
+    "parser",
+    "syntax-highlighting",
+    "grammar"
   ],
   "files": [
     "grammar.js",
@@ -31,7 +37,8 @@
     "bindings/node/*",
     "queries/*",
     "src/**",
-    "*.wasm"
+    "*.wasm",
+    "NOTICE"
   ],
   "dependencies": {
     "node-addon-api": "^8.5.0",
@@ -55,5 +62,9 @@
     "prestart": "tree-sitter build --wasm",
     "start": "tree-sitter playground",
     "test": "node --test bindings/node/*_test.js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }
