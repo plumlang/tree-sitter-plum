@@ -1,0 +1,75 @@
+# Publish the Node package to npm as @plumlang/tree-sitter-plum when a GitHub
+# release is published, or from Actions > Publish > Run workflow with a tag.
+# It is the source package: installing it compiles the parser with node-gyp
+# (there are no prebuilds). The tag (vX.Y.Z) must match the version in
+# package.json and tree-sitter.json. Needs the NPM_TOKEN secret (an npm
+# automation token for the plumlang organisation); without it the job prints
+# a notice and skips.
+name: Publish
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to publish, such as v0.1.0
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TAG: ${{ inputs.tag || github.event.release.tag_name }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - name: NPM_TOKEN
+        id: token
+        run: |
+          if [ -z "$NPM_TOKEN" ]; then
+            echo "::notice::npm publishing skipped: NPM_TOKEN is not set"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.token.outputs.skip != 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+          persist-credentials: false
+      - if: steps.token.outputs.skip != 'true'
+        name: The tag matches package.json and tree-sitter.json
+        id: v
+        run: |
+          version=$(node -p 'require("./package.json").version')
+          if [ "$TAG" != "v$version" ]; then
+            echo "::error::tag $TAG does not match package.json's version, $version"
+            exit 1
+          fi
+          grammar=$(node -p 'require("./tree-sitter.json").metadata.version')
+          if [ "$grammar" != "$version" ]; then
+            echo "::error::tree-sitter.json says $grammar but package.json says $version"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - if: steps.token.outputs.skip != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - if: steps.token.outputs.skip != 'true'
+        name: Publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          VERSION: ${{ steps.v.outputs.version }}
+        run: |
+          if npm view "@plumlang/tree-sitter-plum@$VERSION" version > /dev/null 2>&1; then
+            echo "::notice::@plumlang/tree-sitter-plum@$VERSION is already on npm"
+            exit 0
+          fi
+          npm pack --dry-run
+          npm publish --provenance --access public
+          echo "Published [@plumlang/tree-sitter-plum@$VERSION](https://www.npmjs.com/package/@plumlang/tree-sitter-plum/v/$VERSION)" >> "$GITHUB_STEP_SUMMARY"

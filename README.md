@@ -148,6 +148,29 @@ tuned for Helix belongs in its runtime once Plumlang is upstreamed there.
 A Plumlang extension for Zed, built on this grammar and the `plum lsp`
 language server, is coming.
 
+### Node.js
+
+The grammar is on npm as
+[`@plumlang/tree-sitter-plum`](https://www.npmjs.com/package/@plumlang/tree-sitter-plum),
+for [node-tree-sitter](https://github.com/tree-sitter/node-tree-sitter). It
+is the source package: installing it compiles the parser with
+`node-gyp`, so it needs a C compiler. The queries come with it.
+
+```sh
+npm install tree-sitter @plumlang/tree-sitter-plum
+```
+
+```js
+import Parser from "tree-sitter";
+import Plum from "@plumlang/tree-sitter-plum";
+
+const parser = new Parser();
+parser.setLanguage(Plum);
+const tree = parser.parse('drop("Hello, {name}!")\n');
+console.log(tree.rootNode.toString());
+// Plum.HIGHLIGHTS_QUERY holds queries/highlights.scm
+```
+
 ### Other tools
 
 `tree-sitter.json` declares the file type (`plum`), the scope
@@ -169,6 +192,12 @@ script/parse-examples.sh ../plumlang   # every example and test file
 
 The generated `src/` is committed; regenerate it after changing
 `grammar.js`, and CI checks that it matches.
+
+Each GitHub release publishes the npm package
+(`.github/workflows/publish.yml`, with provenance): bump the version in
+`package.json` and `tree-sitter.json` (and the other manifests), merge, then
+create a release tagged `v` and that version. The workflow stops if the tag
+and `package.json` disagree.
 
 The grammar follows the reference lexer (`src/lexer/lexer.c`) and Pratt
 parser (`src/parser/parser.c`) of

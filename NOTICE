@@ -17,8 +17,9 @@ REPOSITORY
 EXCLUSIVE TO THIS REPOSITORY
 ----------------------------
 
-  * The package names "tree-sitter-plum" on npm, crates.io, PyPI and the Go
-    module path github.com/plumlang/tree-sitter-plum, as the official
+  * The package names "@plumlang/tree-sitter-plum" on npm, "tree-sitter-plum"
+    on crates.io and PyPI, and the Go module path
+    github.com/plumlang/tree-sitter-plum, as the official
     Plumlang grammar. Forks are welcome under MIT, but may not be published
     under these names or presented as the official grammar.
 
