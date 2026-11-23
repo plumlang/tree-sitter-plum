@@ -1,0 +1,356 @@
+================================================================================
+Operator precedence
+================================================================================
+
+a + b * c ** d ** e
+-x ** 2
+a ?? b ?? c
+not a == b and c or d
+a | b ^ c & d << 1
+x // 2 % 3 - 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (binary_expression
+        (identifier)
+        (binary_expression
+          (identifier)
+          (binary_expression
+            (identifier)
+            (identifier))))))
+  (expression_statement
+    (unary_expression
+      (binary_expression
+        (identifier)
+        (integer))))
+  (expression_statement
+    (binary_expression
+      (binary_expression
+        (identifier)
+        (identifier))
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (binary_expression
+        (unary_expression
+          (binary_expression
+            (identifier)
+            (identifier)))
+        (identifier))
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (binary_expression
+        (identifier)
+        (binary_expression
+          (identifier)
+          (binary_expression
+            (identifier)
+            (integer))))))
+  (expression_statement
+    (binary_expression
+      (binary_expression
+        (binary_expression
+          (identifier)
+          (integer))
+        (integer))
+      (integer))))
+
+================================================================================
+Comparisons, membership and type tests
+================================================================================
+
+a <= b
+2 in xs
+s is Shape
+n as float
+opt is int?
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (expression_statement
+    (binary_expression
+      (integer)
+      (identifier)))
+  (expression_statement
+    (type_test_expression
+      (identifier)
+      (type_identifier)))
+  (expression_statement
+    (cast_expression
+      (identifier)
+      (type_identifier)))
+  (expression_statement
+    (type_test_expression
+      (identifier)
+      (optional_type
+        (type_identifier)))))
+
+================================================================================
+Try and spawn
+================================================================================
+
+plant safe = try int("x") ?? 0
+plant job = spawn work(7).wait()
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (identifier)
+    (binary_expression
+      (try_expression
+        (call_expression
+          (identifier)
+          (arguments
+            (string
+              (string_content)))))
+      (integer)))
+  (variable_declaration
+    (identifier)
+    (spawn_expression
+      (call_expression
+        (member_expression
+          (call_expression
+            (identifier)
+            (arguments
+              (integer)))
+          (identifier))
+        (arguments)))))
+
+================================================================================
+Calls, indexing and members
+================================================================================
+
+f(1, b: 2)
+xs[0].name
+xs[1..3]
+user?.name?.upper()
+Channel[int]()
+super.deposit(amount)
+self.balance
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (call_expression
+      (identifier)
+      (arguments
+        (integer)
+        (keyword_argument
+          (identifier)
+          (integer)))))
+  (expression_statement
+    (member_expression
+      (index_expression
+        (identifier)
+        (integer))
+      (identifier)))
+  (expression_statement
+    (index_expression
+      (identifier)
+      (range_expression
+        (integer)
+        (integer))))
+  (expression_statement
+    (call_expression
+      (member_expression
+        (member_expression
+          (identifier)
+          (identifier))
+        (identifier))
+      (arguments)))
+  (expression_statement
+    (call_expression
+      (index_expression
+        (identifier)
+        (identifier))
+      (arguments)))
+  (expression_statement
+    (call_expression
+      (member_expression
+        (super)
+        (identifier))
+      (arguments
+        (identifier))))
+  (expression_statement
+    (member_expression
+      (self)
+      (identifier))))
+
+================================================================================
+Lambdas
+================================================================================
+
+plant double = (x: int) => x * 2
+plant apply = (f: (int) -> int, x: int) => f(x)
+xs.map((n) => n * 10)
+spawn (() => {
+    ch.send(1)
+    ch.close()
+})()
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (identifier)
+    (lambda
+      (lambda_parameters
+        (lambda_parameter
+          (identifier)
+          (type_identifier)))
+      (binary_expression
+        (identifier)
+        (integer))))
+  (variable_declaration
+    (identifier)
+    (lambda
+      (lambda_parameters
+        (lambda_parameter
+          (identifier)
+          (function_type
+            (parameter_types
+              (type_identifier))
+            (type_identifier)))
+        (lambda_parameter
+          (identifier)
+          (type_identifier)))
+      (call_expression
+        (identifier)
+        (arguments
+          (identifier)))))
+  (expression_statement
+    (call_expression
+      (member_expression
+        (identifier)
+        (identifier))
+      (arguments
+        (lambda
+          (lambda_parameters
+            (lambda_parameter
+              (identifier)))
+          (binary_expression
+            (identifier)
+            (integer))))))
+  (expression_statement
+    (spawn_expression
+      (call_expression
+        (parenthesized_expression
+          (lambda
+            (lambda_parameters)
+            (block
+              (expression_statement
+                (call_expression
+                  (member_expression
+                    (identifier)
+                    (identifier))
+                  (arguments
+                    (integer))))
+              (expression_statement
+                (call_expression
+                  (member_expression
+                    (identifier)
+                    (identifier))
+                  (arguments))))))
+        (arguments)))))
+
+================================================================================
+Operators continue on the next line
+================================================================================
+
+plant total = price +
+    tax +
+    shipping
+plant big = (10
+    * 10)
+drop(
+    "a",
+    "b",
+)
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (identifier)
+    (binary_expression
+      (binary_expression
+        (identifier)
+        (identifier))
+      (identifier)))
+  (variable_declaration
+    (identifier)
+    (parenthesized_expression
+      (binary_expression
+        (integer)
+        (integer))))
+  (expression_statement
+    (call_expression
+      (identifier)
+      (arguments
+        (string
+          (string_content))
+        (string
+          (string_content))))))
+
+================================================================================
+If expressions
+================================================================================
+
+plant label = if n == 1 { "point" } else { "points" }
+plant size = if n < 10 {
+    "small"
+}
+else if n < 100 { "medium" } else { "large" }
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (identifier)
+    (if_expression
+      (binary_expression
+        (identifier)
+        (integer))
+      (block
+        (expression_statement
+          (string
+            (string_content))))
+      (block
+        (expression_statement
+          (string
+            (string_content))))))
+  (variable_declaration
+    (identifier)
+    (if_expression
+      (binary_expression
+        (identifier)
+        (integer))
+      (block
+        (expression_statement
+          (string
+            (string_content))))
+      (if_expression
+        (binary_expression
+          (identifier)
+          (integer))
+        (block
+          (expression_statement
+            (string
+              (string_content))))
+        (block
+          (expression_statement
+            (string
+              (string_content))))))))

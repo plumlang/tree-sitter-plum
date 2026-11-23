@@ -1,0 +1,153 @@
+================================================================================
+Variables and constants
+================================================================================
+
+plant count = 3
+plant ratio: float = 1
+plant name: str? = none
+root GREETING = "Hello"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (identifier)
+    (integer))
+  (variable_declaration
+    (identifier)
+    (type_identifier)
+    (integer))
+  (variable_declaration
+    (identifier)
+    (optional_type
+      (type_identifier))
+    (none))
+  (constant_declaration
+    (identifier)
+    (string
+      (string_content))))
+
+================================================================================
+Assignment
+================================================================================
+
+x = 1
+ages["Ada"] = 36
+self.balance += amount
+n -= 4
+a //= 2
+b **= 2
+c <<= 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (assignment_statement
+    (identifier)
+    (integer))
+  (assignment_statement
+    (index_expression
+      (identifier)
+      (string
+        (string_content)))
+    (integer))
+  (assignment_statement
+    (member_expression
+      (self)
+      (identifier))
+    (identifier))
+  (assignment_statement
+    (identifier)
+    (integer))
+  (assignment_statement
+    (identifier)
+    (integer))
+  (assignment_statement
+    (identifier)
+    (integer))
+  (assignment_statement
+    (identifier)
+    (integer)))
+
+================================================================================
+Return, throw, break and continue
+================================================================================
+
+branch f() {
+    while good {
+        break
+        continue
+    }
+    throw ValueError("bad")
+    return
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameters)
+    (block
+      (while_statement
+        (boolean)
+        (block
+          (break_statement)
+          (continue_statement)))
+      (throw_statement
+        (call_expression
+          (identifier)
+          (arguments
+            (string
+              (string_content)))))
+      (return_statement))))
+
+================================================================================
+Blank lines and comments between statements
+================================================================================
+
+plant a = 1
+
+# a comment line
+
+plant b = 2   # trailing
+if a > b {
+
+    drop(a)
+
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (identifier)
+    (integer))
+  (comment)
+  (variable_declaration
+    (identifier)
+    (integer))
+  (comment)
+  (expression_statement
+    (if_expression
+      (binary_expression
+        (identifier)
+        (identifier))
+      (block
+        (expression_statement
+          (call_expression
+            (identifier)
+            (arguments
+              (identifier))))))))
+
+================================================================================
+A leading operator starts a new statement (an error)
+:error
+================================================================================
+
+plant total = price
+    + tax
+
+--------------------------------------------------------------------------------
+
+

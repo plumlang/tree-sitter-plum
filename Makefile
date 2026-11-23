@@ -1,5 +1,5 @@
 LANGUAGE_NAME := tree-sitter-plum
-HOMEPAGE_URL := https://github.com/plumlang/tree-sitter-plum
+HOMEPAGE_URL := https://plum.elixpo.com
 VERSION := 0.1.0
 DESCRIPTION := Tree-sitter grammar for Plumlang
 

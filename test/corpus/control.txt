@@ -1,0 +1,318 @@
+================================================================================
+If statements
+================================================================================
+
+if score >= 90 {
+    drop("A")
+} else if score >= 80 {
+    drop("B")
+} else {
+    drop("C")
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (if_expression
+      (binary_expression
+        (identifier)
+        (integer))
+      (block
+        (expression_statement
+          (call_expression
+            (identifier)
+            (arguments
+              (string
+                (string_content))))))
+      (if_expression
+        (binary_expression
+          (identifier)
+          (integer))
+        (block
+          (expression_statement
+            (call_expression
+              (identifier)
+              (arguments
+                (string
+                  (string_content))))))
+        (block
+          (expression_statement
+            (call_expression
+              (identifier)
+              (arguments
+                (string
+                  (string_content))))))))))
+
+================================================================================
+Else on the next line
+================================================================================
+
+if x {
+    a()
+}
+# a comment between
+else {
+    b()
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (if_expression
+      (identifier)
+      (block
+        (expression_statement
+          (call_expression
+            (identifier)
+            (arguments))))
+      (comment)
+      (block
+        (expression_statement
+          (call_expression
+            (identifier)
+            (arguments)))))))
+
+================================================================================
+If plant
+================================================================================
+
+if plant name = find_user(1) {
+    drop("found {name}")
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (if_expression
+      (plant_binding
+        (identifier)
+        (call_expression
+          (identifier)
+          (arguments
+            (integer))))
+      (block
+        (expression_statement
+          (call_expression
+            (identifier)
+            (arguments
+              (string
+                (string_content)
+                (interpolation
+                  (identifier))))))))))
+
+================================================================================
+For and while
+================================================================================
+
+for i in 0..3 {
+    drop(i)
+}
+for name, age in ages {
+    drop(name, age)
+}
+for _, x in xs.enumerate() {
+}
+while n > 0 {
+    n -= 4
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (for_statement
+    (identifier)
+    (range_expression
+      (integer)
+      (integer))
+    (block
+      (expression_statement
+        (call_expression
+          (identifier)
+          (arguments
+            (identifier))))))
+  (for_statement
+    (identifier)
+    (identifier)
+    (identifier)
+    (block
+      (expression_statement
+        (call_expression
+          (identifier)
+          (arguments
+            (identifier)
+            (identifier))))))
+  (for_statement
+    (wildcard)
+    (identifier)
+    (call_expression
+      (member_expression
+        (identifier)
+        (identifier))
+      (arguments))
+    (block))
+  (while_statement
+    (binary_expression
+      (identifier)
+      (integer))
+    (block
+      (assignment_statement
+        (identifier)
+        (integer)))))
+
+================================================================================
+Match
+================================================================================
+
+match command {
+    "start" => drop("starting")
+    "stop", "halt" => drop("stopping")
+    Card(digits) => {
+        drop(digits)
+    }
+    else => drop("unknown")
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (match_expression
+      (identifier)
+      (match_block
+        (match_arm
+          (string
+            (string_content))
+          (expression_statement
+            (call_expression
+              (identifier)
+              (arguments
+                (string
+                  (string_content))))))
+        (match_arm
+          (string
+            (string_content))
+          (string
+            (string_content))
+          (expression_statement
+            (call_expression
+              (identifier)
+              (arguments
+                (string
+                  (string_content))))))
+        (match_arm
+          (call_expression
+            (identifier)
+            (arguments
+              (identifier)))
+          (block
+            (expression_statement
+              (call_expression
+                (identifier)
+                (arguments
+                  (identifier))))))
+        (match_arm
+          (expression_statement
+            (call_expression
+              (identifier)
+              (arguments
+                (string
+                  (string_content))))))))))
+
+================================================================================
+Match expression
+================================================================================
+
+plant grade = match score {
+    90..=100 => "excellent"
+    50..90 => "pass"
+    _ => "fail"
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (identifier)
+    (match_expression
+      (identifier)
+      (match_block
+        (match_arm
+          (range_expression
+            (integer)
+            (integer))
+          (expression_statement
+            (string
+              (string_content))))
+        (match_arm
+          (range_expression
+            (integer)
+            (integer))
+          (expression_statement
+            (string
+              (string_content))))
+        (match_arm
+          (wildcard)
+          (expression_statement
+            (string
+              (string_content))))))))
+
+================================================================================
+Try, catch and finally
+================================================================================
+
+try {
+    load("config.txt")
+} catch e: NotFound {
+    drop("missing: {e.path}")
+} catch e {
+    drop("other")
+}
+finally {
+    drop("done")
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (try_statement
+    (block
+      (expression_statement
+        (call_expression
+          (identifier)
+          (arguments
+            (string
+              (string_content))))))
+    (catch_clause
+      (identifier)
+      (type_identifier)
+      (block
+        (expression_statement
+          (call_expression
+            (identifier)
+            (arguments
+              (string
+                (string_content)
+                (interpolation
+                  (member_expression
+                    (identifier)
+                    (identifier)))))))))
+    (catch_clause
+      (identifier)
+      (block
+        (expression_statement
+          (call_expression
+            (identifier)
+            (arguments
+              (string
+                (string_content)))))))
+    (finally_clause
+      (block
+        (expression_statement
+          (call_expression
+            (identifier)
+            (arguments
+              (string
+                (string_content)))))))))

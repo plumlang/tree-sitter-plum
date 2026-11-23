@@ -1,0 +1,63 @@
+================================================================================
+Type annotations
+================================================================================
+
+plant a: int? = none
+plant b: list[map[str, int]] = []
+plant c: (int, int) -> int = add
+plant d: shapes.Circle = shapes.Circle(1.0)
+plant e: Channel[int]? = none
+plant f: () -> none = g
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (identifier)
+    (optional_type
+      (type_identifier))
+    (none))
+  (variable_declaration
+    (identifier)
+    (generic_type
+      (type_identifier)
+      (type_arguments
+        (generic_type
+          (type_identifier)
+          (type_arguments
+            (type_identifier)
+            (type_identifier)))))
+    (list))
+  (variable_declaration
+    (identifier)
+    (function_type
+      (parameter_types
+        (type_identifier)
+        (type_identifier))
+      (type_identifier))
+    (identifier))
+  (variable_declaration
+    (identifier)
+    (scoped_type
+      (identifier)
+      (type_identifier))
+    (call_expression
+      (member_expression
+        (identifier)
+        (identifier))
+      (arguments
+        (float))))
+  (variable_declaration
+    (identifier)
+    (optional_type
+      (generic_type
+        (type_identifier)
+        (type_arguments
+          (type_identifier))))
+    (none))
+  (variable_declaration
+    (identifier)
+    (function_type
+      (parameter_types)
+      (none))
+    (identifier)))

@@ -1,0 +1,260 @@
+================================================================================
+Functions
+================================================================================
+
+branch add(a: int, b: int) -> int {
+    return a + b
+}
+
+branch square(x: int) -> int => x * x
+
+branch connect(host: str, port: int = 80, secure: bool = bad) -> str {
+    return "{host}:{port}"
+}
+
+branch greet(name: str) {
+    drop("Hello, {name}")
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_declaration
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type_identifier))
+      (parameter
+        (identifier)
+        (type_identifier)))
+    (type_identifier)
+    (block
+      (return_statement
+        (binary_expression
+          (identifier)
+          (identifier)))))
+  (function_declaration
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type_identifier)))
+    (type_identifier)
+    (binary_expression
+      (identifier)
+      (identifier)))
+  (function_declaration
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type_identifier))
+      (parameter
+        (identifier)
+        (type_identifier)
+        (integer))
+      (parameter
+        (identifier)
+        (type_identifier)
+        (boolean)))
+    (type_identifier)
+    (block
+      (return_statement
+        (string
+          (interpolation
+            (identifier))
+          (string_content)
+          (interpolation
+            (identifier))))))
+  (function_declaration
+    (identifier)
+    (parameters
+      (parameter
+        (identifier)
+        (type_identifier)))
+    (block
+      (expression_statement
+        (call_expression
+          (identifier)
+          (arguments
+            (string
+              (string_content)
+              (interpolation
+                (identifier)))))))))
+
+================================================================================
+Trees
+================================================================================
+
+tree Account {
+    owner: str
+    balance: float = 0.0
+    _audit: list[str] = []
+    parent: weak Account?
+
+    branch deposit(amount: float) {
+        self.balance += amount
+    }
+
+    branch to_str() -> str => "{self.owner}"
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (tree_declaration
+    (type_identifier)
+    (tree_body
+      (field_declaration
+        (identifier)
+        (type_identifier))
+      (field_declaration
+        (identifier)
+        (type_identifier)
+        (float))
+      (field_declaration
+        (identifier)
+        (generic_type
+          (type_identifier)
+          (type_arguments
+            (type_identifier)))
+        (list))
+      (field_declaration
+        (identifier)
+        (optional_type
+          (type_identifier)))
+      (method_declaration
+        (identifier)
+        (parameters
+          (parameter
+            (identifier)
+            (type_identifier)))
+        (block
+          (assignment_statement
+            (member_expression
+              (self)
+              (identifier))
+            (identifier))))
+      (method_declaration
+        (identifier)
+        (parameters)
+        (type_identifier)
+        (string
+          (interpolation
+            (member_expression
+              (self)
+              (identifier))))))))
+
+================================================================================
+Inheritance and traits
+================================================================================
+
+trait Shape {
+    branch area() -> float
+    branch name() -> str => "shape"
+}
+
+tree Circle : Shape {
+    radius: float
+    branch area() -> float => 3.14159 * self.radius ** 2
+}
+
+tree Savings : Account, Shape {
+    rate: float = 0.02
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (trait_declaration
+    (type_identifier)
+    (tree_body
+      (method_declaration
+        (identifier)
+        (parameters)
+        (type_identifier))
+      (method_declaration
+        (identifier)
+        (parameters)
+        (type_identifier)
+        (string
+          (string_content)))))
+  (tree_declaration
+    (type_identifier)
+    (supertypes
+      (type_identifier))
+    (tree_body
+      (field_declaration
+        (identifier)
+        (type_identifier))
+      (method_declaration
+        (identifier)
+        (parameters)
+        (type_identifier)
+        (binary_expression
+          (float)
+          (binary_expression
+            (member_expression
+              (self)
+              (identifier))
+            (integer))))))
+  (tree_declaration
+    (type_identifier)
+    (supertypes
+      (type_identifier)
+      (type_identifier))
+    (tree_body
+      (field_declaration
+        (identifier)
+        (type_identifier)
+        (float)))))
+
+================================================================================
+Kinds
+================================================================================
+
+kind Direction { North, East, South, West }
+
+kind Payment {
+    Cash
+    Card(last4: str)
+}
+
+kind Trailing {
+    A,
+    B,
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (kind_declaration
+    (type_identifier)
+    (kind_body
+      (kind_case
+        (identifier))
+      (kind_case
+        (identifier))
+      (kind_case
+        (identifier))
+      (kind_case
+        (identifier))))
+  (kind_declaration
+    (type_identifier)
+    (kind_body
+      (kind_case
+        (identifier))
+      (kind_case
+        (identifier)
+        (parameters
+          (parameter
+            (identifier)
+            (type_identifier))))))
+  (kind_declaration
+    (type_identifier)
+    (kind_body
+      (kind_case
+        (identifier))
+      (kind_case
+        (identifier)))))

@@ -1,0 +1,40 @@
+================================================================================
+Seed
+================================================================================
+
+seed math
+seed net.http
+seed net.http as web
+seed math { sqrt, PI }
+seed ./shapes
+seed ./models/user as user
+seed ../lib/plant
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (seed_statement
+    (module_path
+      (identifier)))
+  (seed_statement
+    (module_path
+      (identifier)
+      (identifier)))
+  (seed_statement
+    (module_path
+      (identifier)
+      (identifier))
+    (identifier))
+  (seed_statement
+    (module_path
+      (identifier))
+    (import_list
+      (identifier)
+      (identifier)))
+  (seed_statement
+    (relative_path))
+  (seed_statement
+    (relative_path)
+    (identifier))
+  (seed_statement
+    (relative_path)))

@@ -7,6 +7,7 @@
     "type": "git",
     "url": "git+https://github.com/plumlang/tree-sitter-plum.git"
   },
+  "homepage": "https://plum.elixpo.com",
   "license": "MIT",
   "author": {
     "name": "Elixpo and the Plumlang contributors",
@@ -19,7 +20,8 @@
     "incremental",
     "parsing",
     "tree-sitter",
-    "plum"
+    "plum",
+    "plumlang"
   ],
   "files": [
     "grammar.js",

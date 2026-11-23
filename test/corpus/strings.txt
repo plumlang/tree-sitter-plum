@@ -1,0 +1,144 @@
+================================================================================
+Plain strings and escapes
+================================================================================
+
+"Hello"
+"Tab:\t, newline:\n, quote: \", backslash: \\"
+"braces: \{ \} unicode: \u{1F351} nul: \0"
+""
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (string
+      (string_content)))
+  (expression_statement
+    (string
+      (string_content)
+      (escape_sequence)
+      (string_content)
+      (escape_sequence)
+      (string_content)
+      (escape_sequence)
+      (string_content)
+      (escape_sequence)))
+  (expression_statement
+    (string
+      (string_content)
+      (escape_sequence)
+      (string_content)
+      (escape_sequence)
+      (string_content)
+      (escape_sequence)
+      (string_content)
+      (escape_sequence)))
+  (expression_statement
+    (string)))
+
+================================================================================
+Interpolation
+================================================================================
+
+drop("Hello, {name}! {2 + 2}")
+drop("{a}{b}")
+drop("nested: {"inner {x}"} key: {m["key"]}")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (call_expression
+      (identifier)
+      (arguments
+        (string
+          (string_content)
+          (interpolation
+            (identifier))
+          (string_content)
+          (interpolation
+            (binary_expression
+              (integer)
+              (integer)))))))
+  (expression_statement
+    (call_expression
+      (identifier)
+      (arguments
+        (string
+          (interpolation
+            (identifier))
+          (interpolation
+            (identifier))))))
+  (expression_statement
+    (call_expression
+      (identifier)
+      (arguments
+        (string
+          (string_content)
+          (interpolation
+            (string
+              (string_content)
+              (interpolation
+                (identifier))))
+          (string_content)
+          (interpolation
+            (index_expression
+              (identifier)
+              (string
+                (string_content)))))))))
+
+================================================================================
+Interpolation formats
+================================================================================
+
+drop("{price:.2} [{name:>6}] [{name:<6}] {255:x}")
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (call_expression
+      (identifier)
+      (arguments
+        (string
+          (interpolation
+            (identifier)
+            (format_specifier))
+          (string_content)
+          (interpolation
+            (identifier)
+            (format_specifier))
+          (string_content)
+          (interpolation
+            (identifier)
+            (format_specifier))
+          (string_content)
+          (interpolation
+            (integer)
+            (format_specifier)))))))
+
+================================================================================
+Multi-line strings
+================================================================================
+
+plant poem = """
+    Roses are red,
+      Plums are {colour}.
+    "Quoted" and ""doubled"".
+    """
+plant inline = """no newline"""
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (identifier)
+    (string
+      (string_content)
+      (interpolation
+        (identifier))
+      (string_content)))
+  (variable_declaration
+    (identifier)
+    (string
+      (string_content))))

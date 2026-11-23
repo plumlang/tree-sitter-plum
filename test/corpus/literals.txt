@@ -1,0 +1,213 @@
+================================================================================
+Comments
+================================================================================
+
+# A whole-line comment
+plant total = 0   # a comment after code
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (variable_declaration
+    (identifier)
+    (integer))
+  (comment))
+
+================================================================================
+Integers
+================================================================================
+
+42
+1_000_000
+0xFF
+0o755
+0b1010_0101
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (integer))
+  (expression_statement
+    (integer))
+  (expression_statement
+    (integer))
+  (expression_statement
+    (integer))
+  (expression_statement
+    (integer)))
+
+================================================================================
+Floats
+================================================================================
+
+3.14
+0.5
+1e9
+6.022e23
+2.5e-3
+1E+2
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (float))
+  (expression_statement
+    (float))
+  (expression_statement
+    (float))
+  (expression_statement
+    (float))
+  (expression_statement
+    (float))
+  (expression_statement
+    (float)))
+
+================================================================================
+Booleans and none
+================================================================================
+
+good
+bad
+true
+false
+none
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (boolean))
+  (expression_statement
+    (boolean))
+  (expression_statement
+    (boolean))
+  (expression_statement
+    (boolean))
+  (expression_statement
+    (none)))
+
+================================================================================
+Ranges are not floats
+================================================================================
+
+plant a = 1..5
+plant b = 0..=3
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (identifier)
+    (range_expression
+      (integer)
+      (integer)))
+  (variable_declaration
+    (identifier)
+    (range_expression
+      (integer)
+      (integer))))
+
+================================================================================
+Lists
+================================================================================
+
+plant xs = [1, 2, 3]
+plant names = [
+    "Ada",
+    "Grace",
+]
+plant empty: list[int] = []
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (identifier)
+    (list
+      (integer)
+      (integer)
+      (integer)))
+  (variable_declaration
+    (identifier)
+    (list
+      (string
+        (string_content))
+      (string
+        (string_content))))
+  (variable_declaration
+    (identifier)
+    (generic_type
+      (type_identifier)
+      (type_arguments
+        (type_identifier)))
+    (list)))
+
+================================================================================
+Maps
+================================================================================
+
+plant a = {"a": 1, "b": 2}
+plant e: map[str, int] = {:}
+plant t = {"a": 1,}
+plant person = {
+    "name": "Ada",
+    "age": 36
+}
+plant multi = {"ada": 36,
+    "bo": 12}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (identifier)
+    (map
+      (pair
+        (string
+          (string_content))
+        (integer))
+      (pair
+        (string
+          (string_content))
+        (integer))))
+  (variable_declaration
+    (identifier)
+    (generic_type
+      (type_identifier)
+      (type_arguments
+        (type_identifier)
+        (type_identifier)))
+    (map))
+  (variable_declaration
+    (identifier)
+    (map
+      (pair
+        (string
+          (string_content))
+        (integer))))
+  (variable_declaration
+    (identifier)
+    (map
+      (pair
+        (string
+          (string_content))
+        (string
+          (string_content)))
+      (pair
+        (string
+          (string_content))
+        (integer))))
+  (variable_declaration
+    (identifier)
+    (map
+      (pair
+        (string
+          (string_content))
+        (integer))
+      (pair
+        (string
+          (string_content))
+        (integer)))))
