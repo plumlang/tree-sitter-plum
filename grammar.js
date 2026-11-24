@@ -73,10 +73,11 @@ export default grammar({
     $._newline,
     $._string_content,
     $._triple_string_content,
+    $.block_comment,
     $._error_sentinel,
   ],
 
-  extras: $ => [$.comment, /\s/],
+  extras: $ => [$.comment, $.doc_comment, $.block_comment, /\s/],
 
   word: $ => $.identifier,
 
@@ -581,6 +582,14 @@ export default grammar({
 
     format_specifier: _ => token(seq(':', /[^}"\n]+/)),
 
-    comment: _ => token(seq('#', /[^\n]*/)),
+    // `#`, then anything but a second `#`, or `###` and more. (`#[` starts
+    // a block comment, which the external scanner sees first.)
+    comment: _ => token(seq('#', optional(choice(
+      seq(/[^#\n]/, /[^\n]*/),
+      seq('##', /[^\n]*/),
+    )))),
+
+    // `##` lines document the declaration after them (`###` doesn't).
+    doc_comment: _ => token(seq('##', optional(seq(/[^#\n]/, /[^\n]*/)))),
   },
 });

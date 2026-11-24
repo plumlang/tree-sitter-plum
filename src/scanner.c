@@ -8,9 +8,16 @@
  * Blank lines and comment lines after it are left to the extras. When the
  * next word after the line break is `else`, `catch` or `finally`, no newline
  * is emitted, so those may start the line after a `}` (parser.c match_else).
+ * The newline token is empty, at the start of the next line (see
+ * scan_newline).
  *
  * STRING_CONTENT / TRIPLE_STRING_CONTENT: text in "..." and """...""" up to
  * a quote, a backslash escape, or a `{` interpolation.
+ *
+ * BLOCK_COMMENT: `#[ ... ]#`, which nests, so it needs counting: each `#[`
+ * inside needs its own `]#`. Nothing else inside means anything (strings
+ * and `#` included). One never closed runs to the end of the file. It is
+ * an extra, like a space: its line breaks end no statement.
  */
 
 #include "tree_sitter/parser.h"
@@ -22,6 +29,7 @@ enum TokenType {
     NEWLINE,
     STRING_CONTENT,
     TRIPLE_STRING_CONTENT,
+    BLOCK_COMMENT,
     ERROR_SENTINEL,
 };
 
@@ -80,33 +88,115 @@ static bool at_continuation_word(TSLexer *lexer) {
     return false;
 }
 
-static bool scan_newline(TSLexer *lexer) {
-    while (lexer->lookahead == ' ' || lexer->lookahead == '\t' || lexer->lookahead == '\r') {
-        skip(lexer);
-    }
-    if (lexer->lookahead != '\n') {
-        /* Another token on this line, a comment (scanned as an extra first;
-         * the newline after it comes back here), `}` or the end of file. */
+/*
+ * Past a block comment, the `#` of its `#[` being the lookahead: true if
+ * there was one (closed or not), false at a `#` that starts anything else,
+ * with the `#` consumed.
+ */
+static bool skip_block_comment(TSLexer *lexer) {
+    advance(lexer);
+    if (lexer->lookahead != '[') {
         return false;
     }
     advance(lexer);
+    unsigned depth = 1;
+    while (depth > 0 && !lexer->eof(lexer)) {
+        int32_t c = lexer->lookahead;
+        advance(lexer);
+        if (c == '#' && lexer->lookahead == '[') {
+            advance(lexer);
+            depth++;
+        } else if (c == ']' && lexer->lookahead == '#') {
+            advance(lexer);
+            depth--;
+        }
+    }
+    return true;
+}
+
+static bool scan_block_comment(TSLexer *lexer) {
+    while (lexer->lookahead == ' ' || lexer->lookahead == '\t' || lexer->lookahead == '\r' ||
+           lexer->lookahead == '\n') {
+        skip(lexer);
+    }
+    if (lexer->lookahead != '#' || !skip_block_comment(lexer)) {
+        return false;
+    }
+    lexer->mark_end(lexer);
+    lexer->result_symbol = BLOCK_COMMENT;
+    return true;
+}
+
+/*
+ * At the end of a line where a statement may end. The line break and the
+ * blank lines after it are skipped as whitespace, and the newline token is
+ * an empty one where the next line starts, so that a block comment there
+ * can come first: it is scanned instead, and the newline is decided at the
+ * end of the comment's last line (a line that goes on with code after the
+ * `]#` then doesn't end the statement before it).
+ */
+static bool scan_newline(TSLexer *lexer, const bool *valid_symbols) {
+    while (lexer->lookahead == ' ' || lexer->lookahead == '\t' || lexer->lookahead == '\r') {
+        skip(lexer);
+    }
+    if (lexer->lookahead == '#') {
+        /* A comment after the code: a block comment is scanned here, a line
+         * comment is left to the extras (the newline after it comes back). */
+        return valid_symbols[BLOCK_COMMENT] && scan_block_comment(lexer);
+    }
+    if (lexer->lookahead != '\n') {
+        return false; /* another token on this line, `}` or the end of file */
+    }
+    while (lexer->lookahead == ' ' || lexer->lookahead == '\t' || lexer->lookahead == '\r' ||
+           lexer->lookahead == '\n') {
+        skip(lexer);
+    }
     lexer->mark_end(lexer);
     lexer->result_symbol = NEWLINE;
+    if (lexer->eof(lexer)) {
+        return true;
+    }
+    if (lexer->lookahead == '#') {
+        advance(lexer);
+        if (lexer->lookahead == '[' && valid_symbols[BLOCK_COMMENT]) {
+            lexer->result_symbol = BLOCK_COMMENT;
+            advance(lexer);
+            unsigned depth = 1;
+            while (depth > 0 && !lexer->eof(lexer)) {
+                int32_t c = lexer->lookahead;
+                advance(lexer);
+                if (c == '#' && lexer->lookahead == '[') {
+                    advance(lexer);
+                    depth++;
+                } else if (c == ']' && lexer->lookahead == '#') {
+                    advance(lexer);
+                    depth--;
+                }
+            }
+            lexer->mark_end(lexer);
+            return true;
+        }
+        while (lexer->lookahead != '\n' && !lexer->eof(lexer)) {
+            advance(lexer); /* a line comment */
+        }
+    }
 
-    /* Look past blank lines and comment lines for `else`, `catch`, `finally`. */
+    /* Look past blank lines and comments for `else`, `catch`, `finally`. */
     for (;;) {
         int32_t c = lexer->lookahead;
+        if (lexer->eof(lexer)) {
+            return true;
+        }
         if (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
             advance(lexer);
         } else if (c == '#') {
-            while (lexer->lookahead != '\n' && !lexer->eof(lexer)) {
-                advance(lexer);
+            if (!skip_block_comment(lexer)) {
+                while (lexer->lookahead != '\n' && !lexer->eof(lexer)) {
+                    advance(lexer);
+                }
             }
         } else {
             break;
-        }
-        if (lexer->eof(lexer)) {
-            return true;
         }
     }
     return !at_continuation_word(lexer);
@@ -154,7 +244,9 @@ bool tree_sitter_plum_external_scanner_scan(void *payload, TSLexer *lexer,
                                             const bool *valid_symbols) {
     (void)payload;
     if (valid_symbols[ERROR_SENTINEL]) {
-        return false; /* error recovery: let the internal lexer decide */
+        /* error recovery: let the internal lexer decide, but a block
+         * comment is still one, or its lines would turn into code */
+        return scan_block_comment(lexer);
     }
     if (valid_symbols[STRING_CONTENT]) {
         return scan_string_content(lexer, false);
@@ -163,7 +255,10 @@ bool tree_sitter_plum_external_scanner_scan(void *payload, TSLexer *lexer,
         return scan_string_content(lexer, true);
     }
     if (valid_symbols[NEWLINE]) {
-        return scan_newline(lexer);
+        return scan_newline(lexer, valid_symbols);
+    }
+    if (valid_symbols[BLOCK_COMMENT]) {
+        return scan_block_comment(lexer);
     }
     return false;
 }

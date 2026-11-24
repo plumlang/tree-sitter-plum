@@ -1,0 +1,139 @@
+================================================================================
+Block comments nest and span lines
+================================================================================
+
+#[ one line ]#
+#[ several
+   lines #[ nested
+   #[ twice ]# ]#
+   "strings" and # mean nothing here: "]#
+plant a = 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (block_comment)
+  (block_comment)
+  (variable_declaration
+    (identifier)
+    (integer)))
+
+================================================================================
+Block comments are spaces
+================================================================================
+
+plant a = #[ in the middle ]# 1
+plant b = 2 #[ after the code,
+   onto the next line ]#
+plant c = 3 + #[
+]# 4
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (identifier)
+    (block_comment)
+    (integer))
+  (variable_declaration
+    (identifier)
+    (integer))
+  (block_comment)
+  (variable_declaration
+    (identifier)
+    (binary_expression
+      (integer)
+      (block_comment)
+      (integer))))
+
+================================================================================
+Block comment between a brace and else
+================================================================================
+
+if a {
+    b()
+}
+#[ a note
+   over two lines ]#
+else {
+    c()
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expression_statement
+    (if_expression
+      (identifier)
+      (block
+        (expression_statement
+          (call_expression
+            (identifier)
+            (arguments))))
+      (block_comment)
+      (block
+        (expression_statement
+          (call_expression
+            (identifier)
+            (arguments)))))))
+
+================================================================================
+Comment markers inside strings
+================================================================================
+
+plant s = "#[ not a comment ]# ## nor this"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (identifier)
+    (string
+      (string_content))))
+
+================================================================================
+Doc comments
+================================================================================
+
+## The module.
+
+## A tree.
+##Markdown, *too*.
+tree Pot {
+    ## The size.
+    size: int
+}
+### Three hashes: an ordinary comment.
+##[ a doc comment, not a block ]#
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (doc_comment)
+  (doc_comment)
+  (doc_comment)
+  (tree_declaration
+    (type_identifier)
+    (tree_body
+      (doc_comment)
+      (field_declaration
+        (identifier)
+        (type_identifier))))
+  (comment)
+  (doc_comment))
+
+================================================================================
+Unclosed block comment
+================================================================================
+
+plant a = 1
+#[ never closed
+plant b = 2
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (variable_declaration
+    (identifier)
+    (integer))
+  (block_comment))
