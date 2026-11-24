@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-plum
-        VERSION "0.1.0"
+        VERSION "1.0.0"
         DESCRIPTION "Tree-sitter grammar for Plumlang"
         HOMEPAGE_URL "https://plum.elixpo.com"
         LANGUAGES C)

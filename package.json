@@ -1,6 +1,6 @@
 {
   "name": "@plumlang/tree-sitter-plum",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Tree-sitter grammar for Plumlang",
   "type": "module",
   "repository": {
