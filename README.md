@@ -188,7 +188,16 @@ npx tree-sitter test              # the corpus in test/corpus/
 npx tree-sitter parse file.plum   # print a tree
 npx tree-sitter highlight file.plum
 script/parse-examples.sh ../plumlang   # every example and test file
+script/check-sample.sh ../plumlang/tests/highlight   # the shared sample
 ```
+
+`script/check-sample.sh` checks the grammar against Plumlang's shared
+highlighting sample ([`tests/highlight/`](https://github.com/plumlang/plumlang/tree/main/tests/highlight)):
+every keyword in the lexer is a token here, `sample.plum` parses without
+errors, and `queries/highlights.scm` highlights every keyword in it.
+Without an argument it downloads the files from plumlang's `main`. CI runs
+it on every push and weekly, so a keyword added to the lexer fails here
+until the grammar knows it.
 
 The generated `src/` is committed; regenerate it after changing
 `grammar.js`, and CI checks that it matches.
