@@ -20,5 +20,7 @@
 
 [
   (comment)
+  (block_comment)
+  (doc_comment)
   (string)
 ] @indent.auto

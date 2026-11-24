@@ -9,4 +9,5 @@
   (arguments)
   (parameters)
   (string)
+  (block_comment)
 ] @fold
