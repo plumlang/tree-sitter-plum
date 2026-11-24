@@ -242,4 +242,9 @@
 
 ; Comments
 
-(comment) @comment @spell
+[
+  (comment)
+  (block_comment)
+] @comment @spell
+
+(doc_comment) @comment.documentation @spell

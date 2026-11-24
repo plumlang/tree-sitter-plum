@@ -26,7 +26,9 @@ for p in [Planet("Earth", 6371.0)] {
 
 ## What it covers
 
-The whole language as the reference implementation parses it: comments,
+The whole language as the reference implementation parses it: comments
+(`#` lines, nested `#[ ... ]#` block comments and `##` doc comments, as
+`comment`, `block_comment` and `doc_comment`),
 integers in every base, floats, strings with escapes, `{interpolation}` and
 `{value:format}`, `"""` multi-line strings, every operator at the reference
 parser's precedence, declarations (`plant`, `root`, `branch`, `tree`,
@@ -116,6 +118,7 @@ scope = "source.plum"
 file-types = ["plum"]
 roots = ["plum.toml"]
 comment-token = "#"
+block-comment-tokens = { start = "#[", end = "]#" }
 indent = { tab-width = 4, unit = "    " }
 language-servers = ["plum"]
 
